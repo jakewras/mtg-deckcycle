@@ -1,7 +1,7 @@
 # A ruby script used to login to tappedout.net and deckcycle
 # a Magic deck in a loop every three hours (between 9am and 10pm)
 # via Firefox Selenium WebDriver
-# @version 1.0.0
+# @version 0.1.0
 # @author Jake Rasmussen jakewras@gmail.com
 # @note rubocop complient
 
