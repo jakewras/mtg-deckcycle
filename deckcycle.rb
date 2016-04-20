@@ -1,7 +1,7 @@
 # A ruby script used to login to tappedout.net and deckcycle
 # a Magic deck in a loop every three hours (between 9am and 10pm)
 # via Firefox Selenium WebDriver
-# @version 0.1.0
+# @version 0.1.1
 # @author Jake Rasmussen jakewras@gmail.com
 # @note rubocop complient
 
@@ -16,9 +16,9 @@ require 'retries'
 require 'optparse'
 
 options = OpenStruct.new
-options.name = ''
-options.username = ''
-options.password = ''
+options.name = nil
+options.username = nil
+options.password = nil
 OptionParser.new do |opts|
   opts.banner = 'Usage: deckcycle.rb [options]'
 
@@ -31,7 +31,18 @@ OptionParser.new do |opts|
   opts.on('-p', '--password [PASSWORD]', 'Tappedout.net password') do |v|
     options[:password] = v
   end
+  opts.on('-h', '--help', 'Display this screen') do
+    puts opts
+    exit
+  end
 end.parse!
+mandatory = [:name, :username, :password]
+missing = mandatory.select { |param| options[param].nil? }
+unless missing.empty?
+  puts "Missing options: #{missing.join(', ')}"
+  puts system "ruby #{__FILE__} -h"
+  exit
+end
 
 system "rubocop #{__FILE__}"
 
