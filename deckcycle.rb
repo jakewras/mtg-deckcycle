@@ -40,7 +40,7 @@ mandatory = [:name, :username, :password]
 missing = mandatory.select { |param| options[param].nil? }
 unless missing.empty?
   puts "Missing options: #{missing.join(', ')}"
-  puts system "ruby #{__FILE__} -h"
+  system "ruby #{__FILE__} -h"
   exit
 end
 
