@@ -1,14 +1,9 @@
 # A ruby script used to login to tappedout.net and deckcycle
-# a Magic deck in a loop every three hours (between 9am and 10pm)
+# a Magic deck in a loop every three hours (between 9 am and 10 pm)
 # via Firefox Selenium WebDriver
-# @version 0.1.1
 # @author Jake Rasmussen jakewras@gmail.com
-# @note rubocop complient
+# @note rubocop compliant
 
-# gems = %w(rubocop selenium-webdriver activesupport timeout retries)
-# gems.each do |g|
-#   system("gem install #{g}")
-# end
 require 'selenium-webdriver'
 require 'active_support/all'
 require 'timeout'
