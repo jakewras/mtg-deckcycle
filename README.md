@@ -18,4 +18,4 @@ Usage: deckcycle.rb [options]
     -u, --username [USERNAME]        Tappedout.net username
     -p, --password [PASSWORD]        Tappedout.net password
 ```
-`Example: ruby deckcycle.rb -n '<deckname>' -u '<username>' -p '<password>'`
+`Example: bundle exec ruby deckcycle.rb -n '<deckname>' -u '<username>' -p '<password>'`
