@@ -1,6 +1,6 @@
 # mtg-deckcycle
 
-Ruby script used to login to [Tappedout.net](http://http://tappedout.net/) and deckcycle a Magic the Gathering deck every three hours between the hours of 9 am and 10 pm.
+Ruby script used to login to [Tappedout.net](http://tappedout.net/) and deckcycle a Magic the Gathering deck every three hours between the hours of 9 am and 10 pm.
 
 ## Requirements
 - Firefox web browser
