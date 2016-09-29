@@ -1,6 +1,7 @@
 # A ruby script used to login to tappedout.net and deckcycle
 # a Magic deck in a loop every three hours (between 9 am and 10 pm)
 # via Firefox Selenium WebDriver
+#
 # @author Jake Rasmussen jakewras@gmail.com
 # @note rubocop compliant
 
@@ -39,41 +40,47 @@ unless missing.empty?
   exit
 end
 
-system "rubocop #{__FILE__}"
+retry_count = 0
+begin
+  Timeout.timeout 1.month do
+    loop do
+      @current_time = Time.now
+      if @current_time.hour.between? 9, 22
+        driver = Selenium::WebDriver.for :firefox
 
-Timeout.timeout 1.month do
-  loop do
-    @current_time = Time.now
-    if @current_time.hour.between? 9, 22
-      driver = Selenium::WebDriver.for :firefox
+        # Login
+        driver.navigate.to 'http://tappedout.net/accounts/login/?next=/'
+        element = driver.find_element :name, 'username'
+        element.send_keys options[:username]
+        element = driver.find_element :name, 'password'
+        element.send_keys options[:password]
+        element.submit
 
-      # Login
-      driver.navigate.to 'http://tappedout.net/accounts/login/?next=/'
-      element = driver.find_element :name, 'username'
-      element.send_keys options[:username]
-      element = driver.find_element :name, 'password'
-      element.send_keys options[:password]
-      element.submit
+        # Attempt to deckcycle
+        with_retries max_tries: 10 do
+          url = "http://tappedout.net/mtg-decks/#{options[:name]}/deckcycle/"
+          driver.navigate.to url
+        end
 
-      # Attempt to deckcycle
-      with_retries max_tries: 10 do
-        url = "http://tappedout.net/mtg-decks/#{options[:name]}/deckcycle/"
-        driver.navigate.to url
+        # Output text of alert element
+        str = driver.find_element(class: 'alert').text
+        puts "#{@current_time}: #{str}"
+
+        # Logout & quit
+        with_retries max_tries: 10 do
+          driver.navigate.to 'http://tappedout.net/accounts/logout/?next=/'
+        end
+        driver.quit
+        sleep 3.hours
+      else
+        puts "#{@current_time} not running at this time"
+        sleep 1.hour
       end
-
-      # Output text of alert element
-      str = driver.find_element(class: 'alert').text
-      puts "#{@current_time}: #{str}"
-
-      # Logout & quit
-      with_retries max_tries: 10 do
-        driver.navigate.to 'http://tappedout.net/accounts/logout/?next=/'
-      end
-      driver.quit
-      sleep 3.hours
-    else
-      puts "#{@current_time} not running at this time"
-      sleep 1.hour
     end
   end
+rescue Net::ReadTimeout
+  retry_count += 1
+  puts "Net::ReadTimeout retry_count: #{retry_count}"
+  driver.quit
+  retry unless retry_count > 5
 end
