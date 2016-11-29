@@ -3,7 +3,7 @@
 Ruby script used to login to [Tappedout.net](http://tappedout.net/) and deckcycle a Magic the Gathering deck every three hours between the hours of 9 am and 10 pm.
 
 ## Requirements
-- Firefox web browser
+- Firefox web browser version 27.0 or less
 - Ruby
 
 ## Installation
