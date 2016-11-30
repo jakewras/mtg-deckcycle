@@ -46,32 +46,39 @@ begin
     loop do
       @current_time = Time.now
       if @current_time.hour.between? 9, 22
-        driver = Selenium::WebDriver.for :firefox
+        begin
+          driver = Selenium::WebDriver.for :firefox
 
-        # Login
-        driver.navigate.to 'http://tappedout.net/accounts/login/?next=/'
-        element = driver.find_element :name, 'username'
-        element.send_keys options[:username]
-        element = driver.find_element :name, 'password'
-        element.send_keys options[:password]
-        element.submit
+          # Login
+          driver.navigate.to 'http://tappedout.net/accounts/login/?next=/'
+          element = driver.find_element :name, 'username'
+          element.send_keys options[:username]
+          element = driver.find_element :name, 'password'
+          element.send_keys options[:password]
+          element.submit
 
-        # Attempt to deckcycle
-        with_retries max_tries: 10 do
-          url = "http://tappedout.net/mtg-decks/#{options[:name]}/deckcycle/"
-          driver.navigate.to url
+          # Attempt to deckcycle
+          with_retries max_tries: 10 do
+            url = "http://tappedout.net/mtg-decks/#{options[:name]}/deckcycle/"
+            driver.navigate.to url
+          end
+
+          # Output text of alert element
+          str = driver.find_element(class: 'alert').text
+          puts "#{@current_time}: #{str}"
+
+          # Logout & quit
+          with_retries max_tries: 10 do
+            driver.navigate.to 'http://tappedout.net/accounts/logout/?next=/'
+          end
+          driver.quit
+          sleep 3.hours
+        rescue Selenium::WebDriver::Error::NoSuchElementError
+          retry_count += 1
+          puts "Selenium::WebDriver::Error::NoSuchElementError retry_count: #{retry_count}"
+          driver.quit
+          retry_count > 4 ? exit : retry
         end
-
-        # Output text of alert element
-        str = driver.find_element(class: 'alert').text
-        puts "#{@current_time}: #{str}"
-
-        # Logout & quit
-        with_retries max_tries: 10 do
-          driver.navigate.to 'http://tappedout.net/accounts/logout/?next=/'
-        end
-        driver.quit
-        sleep 3.hours
       else
         puts "#{@current_time} not running at this time"
         sleep 1.hour
@@ -82,5 +89,5 @@ rescue Net::ReadTimeout
   retry_count += 1
   puts "Net::ReadTimeout retry_count: #{retry_count}"
   driver.quit
-  retry unless retry_count > 5
+  retry_count > 4 ? exit : retry
 end
