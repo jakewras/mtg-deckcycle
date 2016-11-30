@@ -77,7 +77,10 @@ begin
           retry_count += 1
           puts "Selenium::WebDriver::Error::NoSuchElementError retry_count: #{retry_count}"
           driver.quit
-          retry_count > 4 ? exit : retry
+          exit if retry_count > 4
+          # sleep for 10 minutes and retry because site might be down for maintenance
+          sleep 600
+          retry
         end
       else
         puts "#{@current_time} not running at this time"
