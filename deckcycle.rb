@@ -47,36 +47,36 @@ begin
       @current_time = Time.now
       if @current_time.hour.between? 9, 22
         begin
-          driver = Selenium::WebDriver.for :firefox
+          @driver = Selenium::WebDriver.for :firefox
 
           # Login
-          driver.navigate.to 'http://tappedout.net/accounts/login/?next=/'
-          element = driver.find_element :name, 'username'
+          @driver.navigate.to 'http://tappedout.net/accounts/login/?next=/'
+          element = @driver.find_element :name, 'username'
           element.send_keys options[:username]
-          element = driver.find_element :name, 'password'
+          element = @driver.find_element :name, 'password'
           element.send_keys options[:password]
           element.submit
 
           # Attempt to deckcycle
           with_retries max_tries: 10 do
             url = "http://tappedout.net/mtg-decks/#{options[:name]}/deckcycle/"
-            driver.navigate.to url
+            @driver.navigate.to url
           end
 
           # Output text of alert element
-          str = driver.find_element(class: 'alert').text
+          str = @driver.find_element(class: 'alert').text
           puts "#{@current_time}: #{str}"
 
           # Logout & quit
           with_retries max_tries: 10 do
-            driver.navigate.to 'http://tappedout.net/accounts/logout/?next=/'
+            @driver.navigate.to 'http://tappedout.net/accounts/logout/?next=/'
           end
-          driver.quit
+          @driver.quit
           sleep 3.hours
         rescue Selenium::WebDriver::Error::NoSuchElementError
           retry_count += 1
           puts "Selenium::WebDriver::Error::NoSuchElementError retry_count: #{retry_count}"
-          driver.quit
+          @driver.quit
           exit if retry_count > 4
           # sleep for 10 minutes and retry because site might be down for maintenance
           sleep 600
@@ -91,6 +91,6 @@ begin
 rescue Net::ReadTimeout
   retry_count += 1
   puts "Net::ReadTimeout retry_count: #{retry_count}"
-  driver.quit
+  @driver.quit
   retry_count > 4 ? exit : retry
 end
