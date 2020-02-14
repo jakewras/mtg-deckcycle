@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 gem 'rubocop'
-gem 'selenium-webdriver', '~>2.53'
+gem 'selenium-webdriver', '~>3.142'
 gem 'activesupport'
-gem 'timeout'
 gem 'retries'

@@ -50,16 +50,17 @@ begin
           @driver = Selenium::WebDriver.for :firefox
 
           # Login
-          @driver.navigate.to 'http://tappedout.net/accounts/login/?next=/'
+          @driver.navigate.to 'https://tappedout.net/accounts/login/?next=/'
           element = @driver.find_element :name, 'username'
           element.send_keys options[:username]
           element = @driver.find_element :name, 'password'
           element.send_keys options[:password]
           element.submit
+          sleep 5.seconds
 
           # Attempt to deckcycle
           with_retries max_tries: 10 do
-            url = "http://tappedout.net/mtg-decks/#{options[:name]}/deckcycle/"
+            url = "https://tappedout.net/mtg-decks/#{options[:name]}/deckcycle/"
             @driver.navigate.to url
           end
 
@@ -69,7 +70,7 @@ begin
 
           # Logout & quit
           with_retries max_tries: 10 do
-            @driver.navigate.to 'http://tappedout.net/accounts/logout/?next=/'
+            @driver.navigate.to 'https://tappedout.net/accounts/logout/?next=/'
           end
           @driver.quit
           sleep 3.hours
