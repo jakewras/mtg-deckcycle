@@ -64,6 +64,7 @@ begin
             @driver.navigate.to url
           end
 
+          sleep 3.seconds
           # Output text of alert element
           str = @driver.find_element(class: 'alert').text
           puts "#{@current_time}: #{str}"
@@ -80,7 +81,7 @@ begin
           @driver.quit
           exit if retry_count > 4
           # sleep for 10 minutes and retry because site might be down for maintenance
-          sleep 600
+          sleep 10.minutes
           retry
         end
       else
