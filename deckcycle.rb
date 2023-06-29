@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A ruby script used to login to tappedout.net and deckcycle
 # a Magic deck in a loop every three hours (between 9 am and 10 pm)
 # via Firefox Selenium WebDriver
@@ -10,11 +12,9 @@ require 'active_support/all'
 require 'timeout'
 require 'retries'
 require 'optparse'
+require 'net/http'
 
-options = OpenStruct.new
-options.name = nil
-options.username = nil
-options.password = nil
+options = {}
 OptionParser.new do |opts|
   opts.banner = 'Usage: deckcycle.rb [options]'
 
@@ -32,7 +32,7 @@ OptionParser.new do |opts|
     exit
   end
 end.parse!
-mandatory = [:name, :username, :password]
+mandatory = %i[name username password]
 missing = mandatory.select { |param| options[param].nil? }
 unless missing.empty?
   puts "Missing options: #{missing.join(', ')}"

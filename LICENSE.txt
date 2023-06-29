@@ -1,4 +1,4 @@
-Copyright (c) 2016 Jake Rasmussen
+Copyright (c) 2023 Jake Rasmussen
 
 MIT License
 

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
-gem 'rubocop'
-gem 'selenium-webdriver', '~>3.142'
 gem 'activesupport'
 gem 'retries'
+gem 'rubocop'
+gem 'selenium-webdriver', '~>4'

@@ -9,9 +9,18 @@ Ruby script used to login to [Tappedout.net](http://tappedout.net/) and deckcycl
 - Ruby
 
 ## Installation
-`gem install bundler`
+2023 macOS 13.4
 
-`bundle install`
+1. `brew install rbenv`
+2. `rbenv init`
+3. `rbenv install –list`
+4. `rbenv install 3.2.2`
+5. `rbenv global 3.2.2`
+6. `brew install geckodriver`
+7. `brew install --cask firefox`
+8. `rm Gemfile.lock`
+9. `rbenv exec gem install bundler`
+10. `rbenv exec bundle install`
 
 ## Usage
 ```
@@ -20,4 +29,4 @@ Usage: deckcycle.rb [options]
     -u, --username [USERNAME]        Tappedout.net username
     -p, --password [PASSWORD]        Tappedout.net password
 ```
-`Example: bundle exec ruby deckcycle.rb -n '<deckname>' -u '<username>' -p '<password>'`
+`Example: rbenv exec ruby deckcycle.rb -n '<deckname>' -u '<username>' -p '<password>'`
