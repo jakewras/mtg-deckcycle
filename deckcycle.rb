@@ -50,7 +50,7 @@ begin
           @driver = Selenium::WebDriver.for :firefox
 
           # Login
-          @driver.navigate.to 'https://tappedout.net/accounts/login/?next=/'
+          @driver.navigate.to 'https://tappedout.net/accounts/log-in/?next=/'
           element = @driver.find_element :name, 'username'
           element.send_keys options[:username]
           element = @driver.find_element :name, 'password'
@@ -65,7 +65,7 @@ begin
           end
 
           # Output text of alert element
-          str = @driver.find_element(class: 'alert').text
+          str = @driver.find_element(css: 'div.container.state-messages').text
           puts "#{@current_time}: #{str}"
 
           # Logout & quit
